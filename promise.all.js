@@ -27,7 +27,7 @@
 
 const dataContainer = document.querySelector('#data-container');
 const URL = 'https://jsonplaceholder.typicode.com/todos';
-const todosIds = [43, 10, 5, 100, 200];
+const todosIds = [43, 10, 500, 1000, 200];
 
 const toggleLoader = () => {
   const loader = document.querySelector('#loader');
@@ -55,12 +55,9 @@ const getAll = ids => {
   Promise.all(results)
     .then(responses =>
       Promise.all(
-        responses.map(response => {
-          if (!response.ok) {
-            throw new Error('Ошибка запроса (Мяу)');
-          }
-          return response.json();
-        })
+        responses
+          .filter(response => response.ok)
+          .map(response => response.json())
       )
     )
     .then(data =>
